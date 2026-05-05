@@ -41,7 +41,7 @@ class InnovationAgent(Agent):
         self.influence = self.random.uniform(0.5, 1.5)
 
         # Modify attributes by type
-        if self.agent_type == "Champion":
+        if self.agent_type == "PolicyMaker":
             self.openness *= 1.4
             self.resistance *= 0.6
             self.influence *= 1.6
@@ -144,7 +144,7 @@ class InnovationAdoptionModel(Model):
 
         # Agent types
         agent_types = self.random.choices(
-            ["Champion", "Neutral", "Skeptic", "Manager"],
+            ["PolicyMaker", "Neutral", "Skeptic", "Manager"],
             # STREAMLIT CHANGE: fixed skeptic weight replaced by slider-controlled value
             weights=[champion_ratio, neutral_ratio, skepticism_ratio, manager_ratio],
             k=self.N
@@ -163,20 +163,20 @@ class InnovationAdoptionModel(Model):
             self.grid.place_agent(agent, node_id)
             self.node_to_agent[node_id] = agent
 
-        # Initial adopters: preferably champions
-        champions = [
+        # Initial adopters: preferably PolicyMakers
+        PolicyMakers = [
             agent for agent in self.node_to_agent.values()
-            if agent.agent_type == "Champion"
+            if agent.agent_type == "PolicyMaker"
         ]
 
-        if len(champions) >= 2:
-            initial_adopters = self.random.sample(champions, 2)
-        elif len(champions) == 1:
+        if len(PolicyMakers) >= 2:
+            initial_adopters = self.random.sample(PolicyMakers, 2)
+        elif len(PolicyMakers) == 1:
             others = [
                 agent for agent in self.node_to_agent.values()
-                if agent.agent_type != "Champion"
+                if agent.agent_type != "PolicyMaker"
             ]
-            initial_adopters = champions + self.random.sample(others, 1)
+            initial_adopters = PolicyMakers + self.random.sample(others, 1)
         else:
             initial_adopters = self.random.sample(
                 list(self.node_to_agent.values()),
@@ -297,7 +297,7 @@ state_color_map = {
 }
 
 type_marker_map = {
-    "Champion": "*",
+    "PolicyMaker": "*",
     "Neutral": "o",
     "Skeptic": "s",
     "Manager": "D"
