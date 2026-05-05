@@ -313,7 +313,7 @@ agent_data = model.datacollector.get_agent_vars_dataframe()
 
 final_step = model_data.index.max()
 final_agent_data = agent_data.loc[final_step]
-If st.button("Show steps"):
+if st.button("Show steps"):
     # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
     fig2, ax2 = plt.subplots(figsize=(9, 7))
 
