@@ -368,7 +368,7 @@ state_legend = [
            markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
     Line2D([0], [0], marker="o", color="w", label="Considering",
            markerfacecolor="orange", markeredgecolor="black", markersize=10),
-           Line2D([0], [0], marker="o", color="w", label="Not adopted",
+    Line2D([0], [0], marker="o", color="w", label="Not adopted",
            markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
 ]
 
