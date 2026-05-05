@@ -313,67 +313,67 @@ agent_data = model.datacollector.get_agent_vars_dataframe()
 
 final_step = model_data.index.max()
 final_agent_data = agent_data.loc[final_step]
+If st.button("Show steps"):
+    # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
+    fig2, ax2 = plt.subplots(figsize=(9, 7))
 
-# STREAMLIT CHANGE: use fig, ax instead of plt.figure()
-fig2, ax2 = plt.subplots(figsize=(9, 7))
+    for agent_type, marker in type_marker_map.items():
+        nodes_of_type = [
+            agent.node_id
+            for agent in model.node_to_agent.values()
+            if agent.agent_type == agent_type
+        ]
 
-for agent_type, marker in type_marker_map.items():
-    nodes_of_type = [
-        agent.node_id
-        for agent in model.node_to_agent.values()
-        if agent.agent_type == agent_type
-    ]
+        colors = [
+            state_color_map[model.node_to_agent[node].state]
+            for node in nodes_of_type
+        ]
 
-    colors = [
-        state_color_map[model.node_to_agent[node].state]
-        for node in nodes_of_type
-    ]
+        nx.draw_networkx_nodes(
+            model.network,
+            pos,
+            nodelist=nodes_of_type,
+            node_color=colors,
+            node_shape=marker,
+            node_size=600,
+            edgecolors="black",
+            linewidths=1.0,
+            label=agent_type,
+            # STREAMLIT CHANGE: draw on ax2
+            ax=ax2
+        )
 
-    nx.draw_networkx_nodes(
+    nx.draw_networkx_edges(
         model.network,
         pos,
-        nodelist=nodes_of_type,
-        node_color=colors,
-        node_shape=marker,
-        node_size=600,
-        edgecolors="black",
-        linewidths=1.0,
-        label=agent_type,
+        edge_color="gray",
+        alpha=0.5,
         # STREAMLIT CHANGE: draw on ax2
         ax=ax2
     )
 
-nx.draw_networkx_edges(
-    model.network,
-    pos,
-    edge_color="gray",
-    alpha=0.5,
-    # STREAMLIT CHANGE: draw on ax2
-    ax=ax2
-)
+    nx.draw_networkx_labels(
+        model.network,
+        pos,
+        font_size=9,
+        # STREAMLIT CHANGE: draw on ax2
+        ax=ax2
+    )
 
-nx.draw_networkx_labels(
-    model.network,
-    pos,
-    font_size=9,
-    # STREAMLIT CHANGE: draw on ax2
-    ax=ax2
-)
+    ax2.set_title("Final Innovation Adoption State")
+    ax2.axis("off")
 
-ax2.set_title("Final Innovation Adoption State")
-ax2.axis("off")
+    state_legend = [
+        Line2D([0], [0], marker="o", color="w", label="Adopted",
+            markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
+        Line2D([0], [0], marker="o", color="w", label="Considering",
+            markerfacecolor="orange", markeredgecolor="black", markersize=10),
+        Line2D([0], [0], marker="o", color="w", label="Not adopted",
+            markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
+    ]
 
-state_legend = [
-    Line2D([0], [0], marker="o", color="w", label="Adopted",
-           markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
-    Line2D([0], [0], marker="o", color="w", label="Considering",
-           markerfacecolor="orange", markeredgecolor="black", markersize=10),
-    Line2D([0], [0], marker="o", color="w", label="Not adopted",
-           markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
-]
+    ax2.legend(handles=state_legend, loc="upper right")
 
-ax2.legend(handles=state_legend, loc="upper right")
-
-# STREAMLIT CHANGE: display final network in browser instead of plt.show()
-st.subheader("Final Innovation Adoption Network")
-st.pyplot(fig2)
+    # STREAMLIT CHANGE: display final network in browser instead of plt.show()
+    st.subheader("Final Innovation Adoption Network")
+    st.pyplot(fig2)
