@@ -390,5 +390,5 @@ if st.button("Show steps"):
     )
     components.html(
     animation.to_jshtml(),
-    height=1200,
+    height=1500,
     )
