@@ -314,7 +314,8 @@ agent_data = model.datacollector.get_agent_vars_dataframe()
 
 final_step = model_data.index.max()
 final_agent_data = agent_data.loc[final_step]
-if st.button("Show steps"):
+st.write("**To see the different steps the ABM goes through please push the button**")
+if st.button("Show all steps"):
     # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
     fig, ax = plt.subplots(figsize=(7, 7))
 
