@@ -371,16 +371,16 @@ if st.button("Show all steps"):
         considering = model_data.loc[frame, "Considering"]
         not_adopted = model_data.loc[frame, "Not adopted"]
 
-    state_legend = [
-        Line2D([0], [0], marker="o", color="w", label="Adopted",
-            markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
-        Line2D([0], [0], marker="o", color="w", label="Considering",
-            markerfacecolor="orange", markeredgecolor="black", markersize=10),
-        Line2D([0], [0], marker="o", color="w", label="Not adopted",
-            markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
-    ]
+        state_legend = [
+            Line2D([0], [0], marker="o", color="w", label="Adopted",
+                markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
+            Line2D([0], [0], marker="o", color="w", label="Considering",
+                markerfacecolor="orange", markeredgecolor="black", markersize=10),
+            Line2D([0], [0], marker="o", color="w", label="Not adopted",
+                markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
+        ]
 
-    ax.legend(handles=state_legend, loc="upper center")
+        ax.legend(handles=state_legend, loc="upper right")
 
     animation = FuncAnimation(
         fig,
