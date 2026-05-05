@@ -316,7 +316,7 @@ final_step = model_data.index.max()
 final_agent_data = agent_data.loc[final_step]
 if st.button("Show steps"):
     # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
-    fig, ax = plt.subplots(figsize=(9, 7))
+    fig, ax = plt.subplots(figsize=(8, 7))
 
     def draw_frame(frame):
         ax.clear()
