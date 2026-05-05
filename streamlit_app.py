@@ -364,12 +364,12 @@ ax2.set_title("Final Innovation Adoption State")
 ax2.axis("off")
 
 state_legend = [
-    Line2D([0], [0], marker="o", color="w", label="Not adopted",
-           markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
-    Line2D([0], [0], marker="o", color="w", label="Considering",
-           markerfacecolor="orange", markeredgecolor="black", markersize=10),
     Line2D([0], [0], marker="o", color="w", label="Adopted",
            markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
+    Line2D([0], [0], marker="o", color="w", label="Considering",
+           markerfacecolor="orange", markeredgecolor="black", markersize=10),
+           Line2D([0], [0], marker="o", color="w", label="Not adopted",
+           markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
 ]
 
 ax2.legend(handles=state_legend, loc="upper right")
