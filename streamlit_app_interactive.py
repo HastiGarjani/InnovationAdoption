@@ -287,7 +287,7 @@ ax1.grid(True)
 st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
-fig2, ax2 = plt.subplots(figsize = (6,8))
+fig2, ax2 = plt.subplots(figsize = (2,8))
 
 values = model_data["Adopted"].values
 scaled = (values - values.min()) / (values.max() - values.min())
@@ -301,7 +301,7 @@ for i, value in enumerate(model_data["Adopted"].values):
         bottom=bottom,  # stack on top of previous segments
         color=colors[i],
         edgecolor="white",
-        width=0.03,
+        width=0.8,
         label=f"Stage {i+1}"
     )
     bottom += value
