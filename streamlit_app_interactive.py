@@ -36,8 +36,8 @@ class InnovationAgent(Agent):
         self.next_state = 0
 
         # open attributes
-        self.openness = self.random.uniform(0.5, 1.0)
-        self.resistance = self.random.uniform(0.3, 0.8)
+        self.openness = self.random.uniform(0.3, 1.0)
+        self.resistance = self.random.uniform(0.3, 0.9)
         self.influence = self.random.uniform(0.5, 1.5)
 
         # Modify attributes by type
@@ -52,7 +52,7 @@ class InnovationAgent(Agent):
 
         elif self.agent_type == "Manager":
             self.influence *= 2.0
-            self.openness *= 1.3
+            self.openness *= 1.2
 
 
     def decide(self):
