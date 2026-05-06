@@ -233,13 +233,13 @@ st.title("Innovation Adoption Model")
 open_ratio = st.select_slider(
     "Select ratio of people open to change",
     options = [0.08, 0.18, 0.28, 0.38, 0.48, 0.58, 0.68],
-    value=0.28
+    value = 0.28
     )
 manager_ratio = st.multiselect(
     "Select ratio of persuading managers",
     options = [0.08, 0.18, 0.28],
-    default=0.18,
-    max_selections=1,
+    default = [0.18],
+    max_selections = 1,
     label_visibility = "visible"
 )
 # STREAMLIT CHANGE: display chosen input
