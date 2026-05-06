@@ -138,8 +138,8 @@ class InnovationAdoptionModel(Model):
         self.grid = NetworkGrid(self.network)
 
         # STREAMLIT CHANGE: agent-type weights now depend on skepticism_ratio
-        policymaker_ratio = 1/30
-        manager_ratio = 0.10
+        policymaker_ratio = 0.04
+        manager_ratio = 0.20
         neutral_ratio = 1 - policymaker_ratio - manager_ratio - skepticism_ratio
 
         # Agent types
@@ -241,7 +241,7 @@ st.write("Selected skepticism ratio:", skepticism_ratio)
 
 # STREAMLIT CHANGE: model now receives skepticism_ratio from the browser
 model = InnovationAdoptionModel(
-    N=30,
+    N=25,
     p_connection=0.12,
     external_support=0.02,
     adoption_margin=0.35,
