@@ -300,9 +300,9 @@ st.pyplot(fig1)
 pos = nx.spring_layout(model.network, seed=5)
 
 state_color_map = {
-    0: "lightblue",
-    1: "orange",
-    2: "lightgreen"
+    0: "orange",
+    1: "lightgreen",
+    2: "green"
 }
 
 type_marker_map = {
