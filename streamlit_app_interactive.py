@@ -277,9 +277,9 @@ st.dataframe(model_data)
 # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
 fig1, ax1 = plt.subplots(figsize=(9, 5))
 
-ax1.plot(model_data.index, model_data["Adopted"], marker="o", color="lightgreen", label="Adopted")
-ax1.plot(model_data.index, model_data["Considering"], marker="s", color="orange", label="Considering")
-ax1.plot(model_data.index, model_data["Not adopted"], marker="^", color="lightblue", label="Not adopted")
+ax1.plot(model_data.index, model_data["Adopted"], marker="o", color="green", label="Adopted")
+ax1.plot(model_data.index, model_data["Considering"], marker="s", color="lightgreen", label="Considering")
+ax1.plot(model_data.index, model_data["Not adopted"], marker="^", color="orange", label="Not adopted")
 
 ax1.set_xlabel("Time step")
 ax1.set_ylabel("Number of agents")
@@ -326,7 +326,7 @@ final_agent_data = agent_data.loc[final_step]
 st.write("**To see the different steps the ABM goes through please push the button**")
 if st.button("Show all steps"):
     # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
-    fig, ax = plt.subplots(figsize=(7, 7))
+    fig, ax = plt.subplots(figsize=(8, 8))
 
     def draw_frame(frame):
         ax.clear()
@@ -382,14 +382,14 @@ if st.button("Show all steps"):
 
         state_legend = [
             Line2D([0], [0], marker="o", color="w", label="Adopted",
-                markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
+                markerfacecolor="green", markeredgecolor="black", markersize=10),
             Line2D([0], [0], marker="o", color="w", label="Considering",
-                markerfacecolor="orange", markeredgecolor="black", markersize=10),
+                markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
             Line2D([0], [0], marker="o", color="w", label="Not adopted",
-                markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
+                markerfacecolor="orange", markeredgecolor="black", markersize=10),
         ]
 
-        ax.legend(handles=state_legend, loc="upper center")
+        ax.legend(handles=state_legend, loc="upper right")
 
     animation = FuncAnimation(
         fig,
