@@ -382,7 +382,7 @@ if st.button("Show all steps"):
                 markerfacecolor="lightblue", markeredgecolor="black", markersize=10),
         ]
 
-        ax.legend(handles=state_legend, loc="upper right")
+        ax.legend(handles=state_legend, loc="upper center")
 
     animation = FuncAnimation(
         fig,
