@@ -287,24 +287,24 @@ ax1.grid(True)
 st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
-fig2, ax2 = plt.subplots(figsize = (2,8))
+fig2, ax2 = plt.subplots(figsize = (8,2))
 
 values = model_data["Adopted"].values
 scaled = (values - values.min()) / (values.max() - values.min())
 colors = plt.cm.Greens(scaled)
-bottom = 0
+left = 0
 
 for i, value in enumerate(model_data["Adopted"].values):
-    ax2.bar(
-        "Profit",      # only one category, so one bar
-        value,          # height of this segment
-        bottom=bottom,  # stack on top of previous segments
+    ax2.barh(
+        "Expected Profit",      # only one category, so one bar
+        value,          # width of this segment
+        left=left,      # stack to the right
         color=colors[i],
         edgecolor="white",
-        width=0.8,
+        height=0.8,
         label=f"Stage {i+1}"
     )
-    bottom += value
+    left += value
 ax2.set_ylabel("Profit")
 st.subheader("Expected profit with respect to number of adopters")
 st.pyplot(fig2)
