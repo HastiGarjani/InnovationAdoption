@@ -237,7 +237,7 @@ open_ratio = st.slider(
     value=0.28,
     step=0.10,
     label_visibility="visible",
-    format="%.1f"
+    format="%.2f"
 )
 manager_ratio = st.multiselect(
     "Select ratio of persuading managers",
