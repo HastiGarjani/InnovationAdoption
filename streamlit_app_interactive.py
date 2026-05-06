@@ -237,7 +237,7 @@ open_ratio = st.select_slider(
     )
 manager_ratio = st.select_slider(
     "Select ratio of persuading managers",
-    options = [0.06, 0.12, 0.2],
+    options = [0.02, 0.12, 0.2],
     value = 0.12
 )
 # STREAMLIT CHANGE: display chosen input
