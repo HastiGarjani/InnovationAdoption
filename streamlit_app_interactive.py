@@ -233,7 +233,7 @@ st.title("Innovation Adoption Model")
 open_ratio = st.select_slider(
     "Select ratio of people open to change",
     options = [0.08, 0.18, 0.26, 0.34, 0.4, 0.46, 0.5, 0.54, 0.58],
-    value = 0.28
+    value = 0.26
     )
 manager_ratio = st.select_slider(
     "Select ratio of persuading managers",
