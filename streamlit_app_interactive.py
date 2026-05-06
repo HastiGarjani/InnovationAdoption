@@ -297,7 +297,7 @@ st.pyplot(fig1)
 # ============================================================
 
 # Fixed positions for all animation frames
-pos = nx.spring_layout(model.network, seed=7)
+pos = nx.spring_layout(model.network, seed=6)
 
 state_color_map = {
     0: "lightblue",
