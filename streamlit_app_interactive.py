@@ -307,7 +307,7 @@ state_color_map = {
 
 type_marker_map = {
     "PolicyMaker": "*",
-    "open": "o",
+    "Open": "o",
     "Skeptic": "s",
     "Manager": "D"
 }
