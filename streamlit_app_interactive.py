@@ -278,8 +278,8 @@ st.dataframe(model_data)
 fig1, ax1 = plt.subplots(figsize=(9, 5))
 
 ax1.plot(model_data.index, model_data["Adopted"], marker="o", color="green", label="Adopted")
-ax1.plot(model_data.index, model_data["Considering"], marker="s", color="lightgreen", label="Considering")
-ax1.plot(model_data.index, model_data["Not adopted"], marker="^", color="orange", label="Not adopted")
+ax1.plot(model_data.index, model_data["Considering"], marker="s", color="orange", label="Considering")
+ax1.plot(model_data.index, model_data["Not adopted"], marker="^", color="darkorange", label="Not adopted")
 
 ax1.set_xlabel("Time step")
 ax1.set_ylabel("Number of agents")
@@ -300,8 +300,8 @@ st.pyplot(fig1)
 pos = nx.spring_layout(model.network, seed=5)
 
 state_color_map = {
-    0: "orange",
-    1: "lightgreen",
+    0: "darkorange",
+    1: "orange",
     2: "green"
 }
 
@@ -384,9 +384,9 @@ if st.button("Show all steps"):
             Line2D([0], [0], marker="o", color="w", label="Adopted",
                 markerfacecolor="green", markeredgecolor="black", markersize=10),
             Line2D([0], [0], marker="o", color="w", label="Considering",
-                markerfacecolor="lightgreen", markeredgecolor="black", markersize=10),
-            Line2D([0], [0], marker="o", color="w", label="Not adopted",
                 markerfacecolor="orange", markeredgecolor="black", markersize=10),
+            Line2D([0], [0], marker="o", color="w", label="Not adopted",
+                markerfacecolor="darkorange", markeredgecolor="black", markersize=10),
         ]
 
         ax.legend(handles=state_legend, loc="upper right")
