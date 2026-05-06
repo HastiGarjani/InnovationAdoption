@@ -237,13 +237,13 @@ open_ratio = st.slider(
     value=0.2,
     step=0.1
 )
-manager_ratio = st.slider(
-    "Select ratio of managers",
-    min_value=0.1,
-    max_value=0.3,
-    value=0.2,
-    step=0.1
-)
+# manager_ratio = st.slider(
+#     "Select ratio of managers",
+#     min_value=0.1,
+#     max_value=0.3,
+#     value=0.2,
+#     step=0.1
+# )
 # STREAMLIT CHANGE: display chosen input
 #st.write("Ratio of people open to change:", open_ratio)
 
@@ -254,7 +254,7 @@ model = InnovationAdoptionModel(
     external_support=0.02,
     adoption_margin=0.35,
     open_ratio=open_ratio,
-    manager_ratio=manager_ratio,
+    manager_ratio=0.1,
     seed=7
 )
 
