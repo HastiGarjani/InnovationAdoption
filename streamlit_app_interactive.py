@@ -309,7 +309,7 @@ norm = plt.Normalize(vmin=0, vmax=25)
 sm = plt.cm.ScalarMappable(cmap="Greens", norm=norm)
 sm.set_array([])
 cb = fig2.colorbar(sm, ax=ax2, orientation="horizontal", pad=0.25)
-cb.set_label("Adopters (dark green = maximum 25)")
+cb.ax.xaxis.set_ticklabels([])
 
 ax2.set_xticklabels([])
 ax2.set_xlabel("Expected Profit")
