@@ -250,7 +250,7 @@ model = InnovationAdoptionModel(
     external_support=0.02,
     adoption_margin=0.35,
     open_ratio=open_ratio,
-    manager_ratio=0.1,
+    manager_ratio=manager_ratio,
     seed=7
 )
 
