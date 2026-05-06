@@ -296,7 +296,7 @@ left = 0
 
 for i, value in enumerate(model_data["Adopted"].values):
     ax2.barh(
-        "Expected Profit",      # only one category, so one bar
+        "Adopted",      # only one category, so one bar
         value,          # width of this segment
         left=left,      # stack to the right
         color=colors[i],
