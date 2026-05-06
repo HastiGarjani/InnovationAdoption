@@ -232,18 +232,15 @@ st.title("Innovation Adoption Model")
 # STREAMLIT CHANGE: browser input slider
 open_ratio = st.slider(
     "Select ratio of people open to change",
-    min_value=0.1,
-    max_value=0.7,
-    value=0.2,
+    min_value=0.08,
+    max_value=0.68,
+    value=0.28,
     step=0.1
 )
-# manager_ratio = st.slider(
-#     "Select ratio of managers",
-#     min_value=0.1,
-#     max_value=0.3,
-#     value=0.2,
-#     step=0.1
-# )
+manager_ratio = st.multiselect(
+    "Select ratio of persuading managers",
+    [0.08, 0.18, 0.28]
+)
 # STREAMLIT CHANGE: display chosen input
 #st.write("Ratio of people open to change:", open_ratio)
 
