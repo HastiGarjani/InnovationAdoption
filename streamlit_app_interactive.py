@@ -239,7 +239,7 @@ open_ratio = st.slider(
 )
 manager_ratio = st.multiselect(
     "Select ratio of persuading managers",
-    [0.08, 0.18, 0.28]
+    [0.08, 0.18, 0.28], default=0.18, max_selections=1
 )
 # STREAMLIT CHANGE: display chosen input
 #st.write("Ratio of people open to change:", open_ratio)
