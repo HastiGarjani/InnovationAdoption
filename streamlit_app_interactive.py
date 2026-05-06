@@ -236,7 +236,7 @@ open_ratio = st.select_slider(
     value = 0.26
     )
 manager_ratio = st.select_slider(
-    "Select ratio of persuading managers",
+    "Select ratio of persuasive managers",
     options = [0.02, 0.12, 0.2],
     value = 0.12
 )
