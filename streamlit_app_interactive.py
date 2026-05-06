@@ -287,7 +287,7 @@ ax1.grid(True)
 st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
-fig2, ax2 = plt.subplots(figsize = (2,4))
+fig2, ax2 = plt.subplots(figsize = (2,2))
 
 values = model_data["Adopted"].values
 scaled = (values - values.min()) / (values.max() - values.min())
@@ -296,7 +296,7 @@ bottom = 0
 
 for i, value in enumerate(model_data["Adopted"].values):
     ax2.bar(
-        model_data["Adopted"].values,      # only one category, so one bar
+        "Adopted",      # only one category, so one bar
         value,          # height of this segment
         bottom=bottom,  # stack on top of previous segments
         color=colors[i],
