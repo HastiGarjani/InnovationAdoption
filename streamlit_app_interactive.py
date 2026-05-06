@@ -36,8 +36,8 @@ class InnovationAgent(Agent):
         self.next_state = 0
 
         # open attributes
-        self.openness = self.random.uniform(0.2, 1.0)
-        self.resistance = self.random.uniform(0.3, 1.0)
+        self.openness = self.random.uniform(0.5, 1.0)
+        self.resistance = self.random.uniform(0.3, 0.8)
         self.influence = self.random.uniform(0.5, 1.5)
 
         # Modify attributes by type
@@ -52,7 +52,7 @@ class InnovationAgent(Agent):
 
         elif self.agent_type == "Manager":
             self.influence *= 2.0
-            self.openness *= 1.2
+            self.openness *= 1.3
 
 
     def decide(self):
@@ -238,7 +238,7 @@ open_ratio = st.slider(
     step=0.1
 )
 manager_ratio = st.slider(
-    "Select ratio of people open to change",
+    "Select ratio of managers",
     min_value=0.1,
     max_value=0.3,
     value=0.2,
