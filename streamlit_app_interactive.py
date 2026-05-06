@@ -287,7 +287,26 @@ ax1.grid(True)
 st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
+fig2, ax2 = plt.subplots(figsize = (2,6))
 
+values = model_data["Adopted"].values
+scaled = (values - values.min()) / (values.max() - values.min())
+colors = plt.cm.Greens(scaled)
+bottom = 0
+
+for i, value in enumerate(model_data["Adopted"].values):
+    ax2.bar(
+        model_data["Adopted"],      # only one category, so one bar
+        value,          # height of this segment
+        bottom=bottom,  # stack on top of previous segments
+        color=colors[i],
+        edgecolor="white",
+        label=f"Stage {i+1}"
+    )
+    bottom += value
+ax2.set_ylabel("Profit")
+st.subheader("Expected profit with respect to number of adopters")
+st.pyplot(fig2)
 # ============================================================
 # Second output: final network plot
 # ============================================================
