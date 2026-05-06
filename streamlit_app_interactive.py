@@ -52,7 +52,7 @@ class InnovationAgent(Agent):
 
         elif self.agent_type == "Manager":
             self.influence *= 2.0
-            self.openness *= 1.2
+            self.openness *= 1.3
 
 
     def decide(self):
