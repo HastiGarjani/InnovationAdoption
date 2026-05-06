@@ -290,7 +290,6 @@ st.pyplot(fig1)
 fig2, ax2 = plt.subplots(figsize = (8,2))
 
 values = model_data["Adopted"].values
-scaled = (values - values.min()) / (values.max() - values.min())
 colors = plt.cm.Greens(np.clip(values / 25, 0, 1))
 left = 0
 
@@ -305,6 +304,13 @@ for i, value in enumerate(values):
         label=f"Stage {i+1}"
     )
     left += value
+
+norm = plt.Normalize(vmin=0, vmax=25)
+sm = plt.cm.ScalarMappable(cmap="Greens", norm=norm)
+sm.set_array([])
+cb = fig2.colorbar(sm, ax=ax2, orientation="horizontal", pad=0.25)
+cb.set_label("Adopters (dark green = maximum 25)")
+
 ax2.set_xticklabels([])
 ax2.set_xlabel("Expected Profit")
 st.subheader("Expected profit with respect to number of adopters")
