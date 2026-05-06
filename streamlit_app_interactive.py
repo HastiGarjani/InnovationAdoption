@@ -288,7 +288,7 @@ st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
 fig2, ax2 = plt.subplots(figsize = (8,1.8))
-fig2.subplots_adjust(bottom=0.30)
+fig2.subplots_adjust(right=0.80)
 
 values = model_data["Adopted"].values
 colors = plt.cm.Greens(np.clip(values / 25, 0, 1))
@@ -310,10 +310,9 @@ norm = plt.Normalize(vmin=0, vmax=25)
 sm = plt.cm.ScalarMappable(cmap="Greens", norm=norm)
 sm.set_array([])
 
-cax = fig2.add_axes([0.15, 0.12, 0.7, 0.12])
-cb = fig2.colorbar(sm, cax=cax, orientation="horizontal")
-cb.set_label("Adopters (dark green = maximum 25)")
-cb.ax.xaxis.set_ticklabels([])
+cax = fig2.add_axes([0.84, 0.15, 0.05, 0.7])
+cb = fig2.colorbar(sm, cax=cax, orientation="vertical")
+cb.ax.yaxis.set_ticklabels([])
 
 ax2.set_xticklabels([])
 ax2.set_yticks([])
