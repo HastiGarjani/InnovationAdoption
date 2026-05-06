@@ -290,7 +290,7 @@ st.pyplot(fig1)
 fig2, ax2 = plt.subplots(figsize = (8,2))
 
 values = model_data["Adopted"].values
-scaled = (values - values.min()) / (values.max() - values.min())
+scaled = (values - values.min()) / (1 - values.min())
 colors = plt.cm.Greens(scaled)
 left = 0
 
@@ -305,6 +305,7 @@ for i, value in enumerate(model_data["Adopted"].values):
         label=f"Stage {i+1}"
     )
     left += value
+ax2.set_xticklabels([])
 ax2.set_xlabel("Expected Profit")
 st.subheader("Expected profit with respect to number of adopters")
 st.pyplot(fig2)
