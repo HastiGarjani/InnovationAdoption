@@ -318,7 +318,7 @@ cb.set_ticklabels(["min", "max"])
 
 ax2.set_xticklabels([])
 ax2.set_yticks([])
-ax2.set_xlabel("Expected Profit")
+ax2.set_xlabel("Expected Profit at each stage")
 st.subheader("Expected profit with respect to number of adopters")
 st.pyplot(fig2)
 # ============================================================
