@@ -232,7 +232,7 @@ st.title("Innovation Adoption Model")
 # STREAMLIT CHANGE: browser input slider
 open_ratio = st.select_slider(
     "Select ratio of people open to change",
-    options = [0.08, 0.18, 0.28, 0.38, 0.48, 0.58, 0.68],
+    options = [0.08, 0.18, 0.28, 0.38, 0.48, 0.58],
     value = 0.28
     )
 manager_ratio = st.select_slider(
