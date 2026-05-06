@@ -305,7 +305,7 @@ for i, value in enumerate(model_data["Adopted"].values):
         label=f"Stage {i+1}"
     )
     left += value
-ax2.set_ylabel("Profit")
+ax2.set_xlabel("Expected Profit")
 st.subheader("Expected profit with respect to number of adopters")
 st.pyplot(fig2)
 # ============================================================
