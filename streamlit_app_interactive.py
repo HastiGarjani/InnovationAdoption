@@ -301,7 +301,7 @@ for i, value in enumerate(model_data["Adopted"].values):
         bottom=bottom,  # stack on top of previous segments
         color=colors[i],
         edgecolor="white",
-        width=0.3,
+        width=0.03,
         label=f"Stage {i+1}"
     )
     bottom += value
