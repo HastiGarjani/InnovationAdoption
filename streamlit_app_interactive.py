@@ -287,7 +287,8 @@ ax1.grid(True)
 st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
-fig2, ax2 = plt.subplots(figsize = (8,2))
+fig2, ax2 = plt.subplots(figsize = (8,1.8))
+fig2.subplots_adjust(bottom=0.30)
 
 values = model_data["Adopted"].values
 colors = plt.cm.Greens(np.clip(values / 25, 0, 1))
@@ -300,7 +301,7 @@ for i, value in enumerate(values):
         left=left,      # stack to the right
         color=colors[i],
         edgecolor="white",
-        height=0.8,
+        height=0.35,
         label=f"Stage {i+1}"
     )
     left += value
@@ -308,10 +309,14 @@ for i, value in enumerate(values):
 norm = plt.Normalize(vmin=0, vmax=25)
 sm = plt.cm.ScalarMappable(cmap="Greens", norm=norm)
 sm.set_array([])
-cb = fig2.colorbar(sm, ax=ax2, orientation="vertical", pad=0.25)
-cb.ax.yaxis.set_ticklabels([])
+
+cax = fig2.add_axes([0.15, 0.12, 0.7, 0.12])
+cb = fig2.colorbar(sm, cax=cax, orientation="horizontal")
+cb.set_label("Adopters (dark green = maximum 25)")
+cb.ax.xaxis.set_ticklabels([])
 
 ax2.set_xticklabels([])
+ax2.set_yticks([])
 ax2.set_xlabel("Expected Profit")
 st.subheader("Expected profit with respect to number of adopters")
 st.pyplot(fig2)
