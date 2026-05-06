@@ -138,15 +138,15 @@ class InnovationAdoptionModel(Model):
         self.grid = NetworkGrid(self.network)
 
         # STREAMLIT CHANGE: agent-type weights now depend on skepticism_ratio
-        champion_ratio = 0.10
+        policymaker_ratio = 1/30
         manager_ratio = 0.10
-        neutral_ratio = 1 - champion_ratio - manager_ratio - skepticism_ratio
+        neutral_ratio = 1 - policymaker_ratio - manager_ratio - skepticism_ratio
 
         # Agent types
         agent_types = self.random.choices(
             ["PolicyMaker", "Neutral", "Skeptic", "Manager"],
             # STREAMLIT CHANGE: fixed skeptic weight replaced by slider-controlled value
-            weights=[champion_ratio, neutral_ratio, skepticism_ratio, manager_ratio],
+            weights=[policymaker_ratio, neutral_ratio, skepticism_ratio, manager_ratio],
             k=self.N
         )
 
