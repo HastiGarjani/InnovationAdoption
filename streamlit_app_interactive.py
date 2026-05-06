@@ -287,7 +287,7 @@ ax1.grid(True)
 st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
-fig2, ax2 = plt.subplots(figsize = (2,2))
+fig2, ax2 = plt.subplots(figsize = (1,2))
 
 values = model_data["Adopted"].values
 scaled = (values - values.min()) / (values.max() - values.min())
