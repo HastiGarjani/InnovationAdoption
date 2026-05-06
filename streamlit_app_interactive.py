@@ -35,7 +35,7 @@ class InnovationAgent(Agent):
         self.state = 0
         self.next_state = 0
 
-        # Neutral attributes
+        # open attributes
         self.openness = self.random.uniform(0.2, 1.0)
         self.resistance = self.random.uniform(0.3, 1.0)
         self.influence = self.random.uniform(0.5, 1.5)
@@ -52,7 +52,7 @@ class InnovationAgent(Agent):
 
         elif self.agent_type == "Manager":
             self.influence *= 2.0
-            self.openness *= 1.4
+            self.openness *= 1.2
 
 
     def decide(self):
@@ -107,8 +107,9 @@ class InnovationAdoptionModel(Model):
         p_connection,
         external_support,
         adoption_margin,
-        # STREAMLIT CHANGE: added skepticism_ratio as model input
-        skepticism_ratio,
+        # STREAMLIT CHANGE: added skeptic_ratio as model input
+        open_ratio,
+        manager_ratio,
         seed=7
     ):
         super().__init__(seed=seed)
@@ -119,8 +120,8 @@ class InnovationAdoptionModel(Model):
         self.adoption_margin = adoption_margin
 
         # STREAMLIT CHANGE: store browser input inside the model
-        self.skepticism_ratio = skepticism_ratio
-
+        self.open_ratio = open_ratio
+        self.manger_ratio = manager_ratio
         self.current_step = 0
 
         # Create connected network
@@ -139,16 +140,15 @@ class InnovationAdoptionModel(Model):
 
         self.grid = NetworkGrid(self.network)
 
-        # STREAMLIT CHANGE: agent-type weights now depend on skepticism_ratio
+        # STREAMLIT CHANGE: agent-type weights now depend on skeptic_ratio
         policymaker_ratio = 0.04
-        manager_ratio = 0.20
-        neutral_ratio = 1 - policymaker_ratio - manager_ratio - skepticism_ratio
+        skeptic_ratio = 1 - policymaker_ratio - manager_ratio - open_ratio
 
         # Agent types
         agent_types = self.random.choices(
-            ["PolicyMaker", "Neutral", "Skeptic", "Manager"],
+            ["PolicyMaker", "Open", "Skeptic", "Manager"],
             # STREAMLIT CHANGE: fixed skeptic weight replaced by slider-controlled value
-            weights=[policymaker_ratio, neutral_ratio, skepticism_ratio, manager_ratio],
+            weights=[policymaker_ratio, open_ratio, skeptic_ratio, manager_ratio],
             k=self.N
         )
 
@@ -230,24 +230,31 @@ class InnovationAdoptionModel(Model):
 st.title("Innovation Adoption Model")
 
 # STREAMLIT CHANGE: browser input slider
-skepticism_ratio = st.slider(
-    "Select skepticism ratio",
+open_ratio = st.slider(
+    "Select ratio of people open to change",
     min_value=0.1,
     max_value=0.7,
     value=0.2,
     step=0.1
 )
-
+manager_ratio = st.slider(
+    "Select ratio of people open to change",
+    min_value=0.1,
+    max_value=0.3,
+    value=0.2,
+    step=0.1
+)
 # STREAMLIT CHANGE: display chosen input
-st.write("Selected skepticism ratio:", skepticism_ratio)
+#st.write("Ratio of people open to change:", open_ratio)
 
-# STREAMLIT CHANGE: model now receives skepticism_ratio from the browser
+# STREAMLIT CHANGE: model now receives skeptic_ratio from the browser
 model = InnovationAdoptionModel(
     N=25,
     p_connection=0.12,
     external_support=0.02,
     adoption_margin=0.35,
-    skepticism_ratio=skepticism_ratio,
+    open_ratio=open_ratio,
+    manager_ratio=manager_ratio,
     seed=7
 )
 
@@ -300,7 +307,7 @@ state_color_map = {
 
 type_marker_map = {
     "PolicyMaker": "*",
-    "Neutral": "o",
+    "open": "o",
     "Skeptic": "s",
     "Manager": "D"
 }
