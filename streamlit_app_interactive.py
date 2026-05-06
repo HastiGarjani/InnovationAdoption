@@ -291,10 +291,10 @@ fig2, ax2 = plt.subplots(figsize = (8,2))
 
 values = model_data["Adopted"].values
 scaled = (values - values.min()) / (values.max() - values.min())
-colors = plt.cm.Greens(scaled)
+colors = plt.cm.Greens(np.clip(values / 25, 0, 1))
 left = 0
 
-for i, value in enumerate(model_data["Adopted"].values):
+for i, value in enumerate(values):
     ax2.barh(
         "Adopted",      # only one category, so one bar
         value,          # width of this segment
