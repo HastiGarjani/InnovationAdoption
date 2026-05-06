@@ -289,14 +289,14 @@ st.pyplot(fig1)
 
 fig2, ax2 = plt.subplots(figsize = (1,4))
 
-values = model_data["Profit"].values
+values = model_data["Adopted"].values
 scaled = (values - values.min()) / (values.max() - values.min())
 colors = plt.cm.Greens(scaled)
 bottom = 0
 
 for i, value in enumerate(model_data["Adopted"].values):
     ax2.bar(
-        "Adopted",      # only one category, so one bar
+        "Profit",      # only one category, so one bar
         value,          # height of this segment
         bottom=bottom,  # stack on top of previous segments
         color=colors[i],
