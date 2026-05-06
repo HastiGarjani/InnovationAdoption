@@ -290,7 +290,7 @@ st.pyplot(fig1)
 fig2, ax2 = plt.subplots(figsize = (8,2))
 
 values = model_data["Adopted"].values
-scaled = (values - values.min()) / (1 - values.min())
+scaled = (values - values.min()) / (values.max() - values.min())
 colors = plt.cm.Greens(scaled)
 left = 0
 
