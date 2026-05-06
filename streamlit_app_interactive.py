@@ -312,7 +312,9 @@ sm.set_array([])
 
 cax = fig2.add_axes([0.84, 0.15, 0.05, 0.7])
 cb = fig2.colorbar(sm, cax=cax, orientation="vertical")
-cb.ax.yaxis.set_ticklabels([])
+cb.set_label("Profit", rotation=90, labelpad=12)
+cb.set_ticks([0, 25])
+cb.set_ticklabels(["min", "max"])
 
 ax2.set_xticklabels([])
 ax2.set_yticks([])
