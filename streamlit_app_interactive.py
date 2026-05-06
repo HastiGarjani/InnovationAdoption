@@ -297,7 +297,7 @@ st.pyplot(fig1)
 # ============================================================
 
 # Fixed positions for all animation frames
-pos = nx.spring_layout(model.network, seed=6)
+pos = nx.spring_layout(model.network, seed=5)
 
 state_color_map = {
     0: "lightblue",
@@ -326,7 +326,7 @@ final_agent_data = agent_data.loc[final_step]
 st.write("**To see the different steps the ABM goes through please push the button**")
 if st.button("Show all steps"):
     # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(7, 7))
 
     def draw_frame(frame):
         ax.clear()
