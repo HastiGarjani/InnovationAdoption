@@ -6,26 +6,14 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import streamlit.components.v1 as components
 
-# STREAMLIT CHANGE: removed ffmpeg import because it is not needed for browser display
-# import ffmpeg
-
 from matplotlib.animation import FuncAnimation
 from matplotlib.lines import Line2D
-
 from mesa import Agent, Model
 from mesa.space import NetworkGrid
 from mesa.datacollection import DataCollector
-
+# Agents and attributes
 class InnovationAgent(Agent):
-    """
-    Agent in an innovation-adoption system.
-
-    State:
-        0 = Not adopted
-        1 = Considering
-        2 = Adopted
-    """
-
+   
     def __init__(self, model, node_id, agent_type):
         super().__init__(model)
 
