@@ -234,6 +234,8 @@ for _ in range(T):
     model.step()
 
 model_data = model.datacollector.get_model_vars_dataframe()
+list = ['state ' + str(i) for i in range(11)]
+model_data.index=list
 
 #### Show data table in browser
 st.subheader("Model data")
