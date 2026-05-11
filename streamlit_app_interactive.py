@@ -246,8 +246,8 @@ st.dataframe(df_table)
 fig1, ax1 = plt.subplots(figsize=(9, 5))
 
 ax1.plot(model_data.index, model_data["Adopted"], marker="o", color="green", label="Adopted")
-ax1.plot(model_data.index, model_data["Considering"], marker="s", color="orange", label="Considering")
-ax1.plot(model_data.index, model_data["Not adopted"], marker="^", color="red", label="Not adopted")
+ax1.plot(model_data.index, model_data["Considering"], marker="o", color="orange", label="Considering")
+ax1.plot(model_data.index, model_data["Not adopted"], marker="o", color="red", label="Not adopted")
 
 ax1.set_xlabel("Time step")
 ax1.set_ylabel("Number of agents")
