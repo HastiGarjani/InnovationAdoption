@@ -386,7 +386,7 @@ if st.button("Show all steps"):
 
         ax.legend(handles=state_legend, loc="upper right")
 
-    animation = FuncAnimation(
+   animation = FuncAnimation(
         fig,
         draw_frame,
         frames=list(model_data.index),
