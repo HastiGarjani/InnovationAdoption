@@ -53,7 +53,7 @@ class InnovationAgent(Agent):
             self.next_state = 2
             return
            
-        #### Agents neighbors influence decision ####
+        #### Agents' neighbors influence decision ####
         neighbor_nodes = list(self.model.network.neighbors(self.node_id))
         neighbor_agents = [self.model.node_to_agent[n] for n in neighbor_nodes]
 
@@ -239,7 +239,7 @@ df_table = model_data.copy()
 df_table.index = list_table
 
 #### Show data table in browser
-st.subheader("Model data")
+st.subheader("Model data at each step")
 st.dataframe(df_table)
 
 #### Illustration on browser
