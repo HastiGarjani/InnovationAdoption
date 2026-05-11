@@ -393,7 +393,7 @@ if st.button("Show all steps"):
         interval=600,
         repeat=False
     )
-    components.html(
+   components.html(
     animation.to_jshtml(),
     height=1500,
     )
