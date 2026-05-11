@@ -323,7 +323,7 @@ if st.button("Show all steps"):
 
    fig, ax = plt.subplots(figsize=(7, 7))
 
-    def draw_frame(frame):
+   def draw_frame(frame):
         ax.clear()
 
         frame_data = agent_data.loc[frame]
