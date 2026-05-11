@@ -11,7 +11,9 @@ from matplotlib.lines import Line2D
 from mesa import Agent, Model
 from mesa.space import NetworkGrid
 from mesa.datacollection import DataCollector
-# Agents and attributes
+
+
+#### Agents and attributes ####
 class InnovationAgent(Agent):
    
     def __init__(self, model, node_id, agent_type):
@@ -20,15 +22,16 @@ class InnovationAgent(Agent):
         self.node_id = node_id
         self.agent_type = agent_type
 
+        #### Adoption status
         self.state = 0
         self.next_state = 0
 
-        # open attributes
+        #### Receptive people's attributes
         self.openness = self.random.uniform(0.3, 1.0)
         self.resistance = self.random.uniform(0.3, 0.9)
         self.influence = self.random.uniform(0.5, 1.5)
 
-        # Modify attributes by type
+        #### Modify attributes by type
         if self.agent_type == "PolicyMaker":
             self.openness *= 1.4
             self.resistance *= 0.6
@@ -44,15 +47,13 @@ class InnovationAgent(Agent):
 
 
     def decide(self):
-        """
-        Compute next state based on neighbouring adopted agents.
-        """
-
-        # Already adopted agents stay adopted
+        
+        #### Already adopted agents stay adopted ####
         if self.state == 2:
             self.next_state = 2
             return
-
+           
+        #### Agents neighbors influence decision ####
         neighbor_nodes = list(self.model.network.neighbors(self.node_id))
         neighbor_agents = [self.model.node_to_agent[n] for n in neighbor_nodes]
 
@@ -78,24 +79,18 @@ class InnovationAgent(Agent):
             self.next_state = self.state
 
     def advance(self):
-        """
-        Update state after all agents have made their decision.
-        """
+        #### Next state
         self.state = self.next_state
 
 
 class InnovationAdoptionModel(Model):
-    """
-    Mesa model for innovation adoption in a small networked system.
-    """
-
+   
     def __init__(
         self,
         N,
         p_connection,
         external_support,
         adoption_margin,
-        # STREAMLIT CHANGE: added skeptic_ratio as model input
         open_ratio,
         manager_ratio,
         seed=7
@@ -107,12 +102,12 @@ class InnovationAdoptionModel(Model):
         self.external_support = external_support
         self.adoption_margin = adoption_margin
 
-        # STREAMLIT CHANGE: store browser input inside the model
+        #### Store browser input inside the model
         self.open_ratio = open_ratio
         self.manger_ratio = manager_ratio
         self.current_step = 0
 
-        # Create connected network
+        #### Create connected network
         self.network = nx.erdos_renyi_graph(
             self.N,
             self.p_connection,
@@ -128,21 +123,19 @@ class InnovationAdoptionModel(Model):
 
         self.grid = NetworkGrid(self.network)
 
-        # STREAMLIT CHANGE: agent-type weights now depend on skeptic_ratio
         policymaker_ratio = 0.04
         skeptic_ratio = 1 - policymaker_ratio - manager_ratio - open_ratio
 
-        # Agent types
+        #### Agent types ratio
         agent_types = self.random.choices(
             ["PolicyMaker", "Open", "Skeptic", "Manager"],
-            # STREAMLIT CHANGE: fixed skeptic weight replaced by slider-controlled value
             weights=[policymaker_ratio, open_ratio, skeptic_ratio, manager_ratio],
             k=self.N
         )
 
         self.node_to_agent = {}
 
-        # Create and place agents
+        #### Create and place agents
         for node_id in self.network.nodes:
             agent = InnovationAgent(
                 model=self,
@@ -153,7 +146,6 @@ class InnovationAdoptionModel(Model):
             self.grid.place_agent(agent, node_id)
             self.node_to_agent[node_id] = agent
 
-        # Initial adopters: preferably PolicyMakers
         PolicyMakers = [
             agent for agent in self.node_to_agent.values()
             if agent.agent_type == "PolicyMaker"
@@ -195,29 +187,24 @@ class InnovationAdoptionModel(Model):
         self.datacollector.collect(self)
 
     def step(self):
-        """
-        One simulation step.
-        """
 
-        # First all agents decide based on current states
+        #### First all agents decide based on current states
         self.agents.do("decide")
 
-        # Then all agents update simultaneously
+        #### Then all agents update simultaneously
         self.agents.do("advance")
 
         self.current_step += 1
         self.datacollector.collect(self)
 
 
-# ============================================================
-# STREAMLIT APP SECTION
-# Everything below replaces your normal notebook-running section.
-# ============================================================
 
-# STREAMLIT CHANGE: browser title
+#### STREAMLIT APP SECTION
+
+#### Browser title
 st.title("Innovation Adoption Model")
 
-# STREAMLIT CHANGE: browser input slider
+#### Browser input
 open_ratio = st.select_slider(
     "Select the ratio of people open to change",
     options = [0.08, 0.18, 0.26, 0.34, 0.4, 0.46, 0.5, 0.54, 0.58],
@@ -228,10 +215,8 @@ manager_ratio = st.select_slider(
     options = [0.02, 0.12, 0.2],
     value = 0.12
 )
-# STREAMLIT CHANGE: display chosen input
-#st.write("Ratio of people open to change:", open_ratio)
 
-# STREAMLIT CHANGE: model now receives skeptic_ratio from the browser
+#### Initializing model
 model = InnovationAdoptionModel(
     N=25,
     p_connection=0.12,
@@ -242,6 +227,7 @@ model = InnovationAdoptionModel(
     seed=7
 )
 
+#### Number of steps
 T = 10
 
 for _ in range(T):
@@ -249,16 +235,11 @@ for _ in range(T):
 
 model_data = model.datacollector.get_model_vars_dataframe()
 
-# STREAMLIT CHANGE: show data table in browser
+#### Show data table in browser
 st.subheader("Model data")
 st.dataframe(model_data)
 
-
-# ============================================================
-# First output: line plot
-# ============================================================
-
-# STREAMLIT CHANGE: use fig, ax instead of plt.figure()
+#### Illustration on browser
 fig1, ax1 = plt.subplots(figsize=(9, 5))
 
 ax1.plot(model_data.index, model_data["Adopted"], marker="o", color="green", label="Adopted")
@@ -271,7 +252,6 @@ ax1.set_title("Innovation Adoption Over Time")
 ax1.legend()
 ax1.grid(True)
 
-# STREAMLIT CHANGE: display plot in browser instead of plt.show()
 st.subheader("Innovation Adoption Over Time")
 st.pyplot(fig1)
 
@@ -300,7 +280,7 @@ sm.set_array([])
 
 cax = fig2.add_axes([0.84, 0.15, 0.05, 0.7])
 cb = fig2.colorbar(sm, cax=cax, orientation="vertical")
-# cb.set_label("Profit", rotation=90, labelpad=12)
+
 cb.set_ticks([0, 25])
 cb.set_ticklabels(["min", "max"])
 
@@ -309,11 +289,8 @@ ax2.set_yticks([])
 ax2.set_xlabel("Expected Profit at each time step")
 st.subheader("Expected profit with respect to number of adopters")
 st.pyplot(fig2)
-# ============================================================
-# Second output: final network plot
-# ============================================================
 
-# Fixed positions for all animation frames
+#### Fixed positions for all animation frames
 pos = nx.spring_layout(model.network, seed=5)
 
 state_color_map = {
@@ -335,15 +312,16 @@ state_label_map = {
     2: "Adopted"
 }
 
-# Store state history manually from agent data
+#### Store state history
 agent_data = model.datacollector.get_agent_vars_dataframe()
 
 final_step = model_data.index.max()
 final_agent_data = agent_data.loc[final_step]
 st.write("**To see the different steps the ABM goes through please push the button**")
+
 if st.button("Show all steps"):
-    # STREAMLIT CHANGE: use fig, ax instead of plt.figure()
-    fig, ax = plt.subplots(figsize=(7, 7))
+
+   fig, ax = plt.subplots(figsize=(7, 7))
 
     def draw_frame(frame):
         ax.clear()
