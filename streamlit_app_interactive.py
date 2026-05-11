@@ -235,11 +235,12 @@ for _ in range(T):
 
 model_data = model.datacollector.get_model_vars_dataframe()
 list = ['step ' + str(i) for i in range(11)]
-model_data.index=list
+df_table = model_data.copy()
+df_table.index=list
 
 #### Show data table in browser
 st.subheader("Model data")
-st.dataframe(model_data)
+st.dataframe(df_table)
 
 #### Illustration on browser
 fig1, ax1 = plt.subplots(figsize=(9, 5))
