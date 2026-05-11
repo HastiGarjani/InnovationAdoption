@@ -234,9 +234,9 @@ for _ in range(T):
     model.step()
 
 model_data = model.datacollector.get_model_vars_dataframe()
-list = ['step ' + str(i) for i in range(11)]
+list_table = ['step ' + str(i) for i in range(11)]
 df_table = model_data.copy()
-df_table.index=list
+df_table.index = list_table
 
 #### Show data table in browser
 st.subheader("Model data")
