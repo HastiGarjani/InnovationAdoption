@@ -1,4 +1,4 @@
-# InnovationAdaption
+# InnovationAdoption
 
 - Agent-based model of innovation adoption
 - Find code in streamlit_app_interactive.py
