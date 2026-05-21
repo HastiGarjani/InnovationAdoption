@@ -320,7 +320,7 @@ agent_data = model.datacollector.get_agent_vars_dataframe()
 
 final_step = model_data.index.max()
 final_agent_data = agent_data.loc[final_step]
-st.write("** Different steps the ABM goes through**")
+st.write("**Different steps the ABM goes through**")
 # st.button("Show all steps")
 
 if 1==1:
