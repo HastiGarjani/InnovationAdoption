@@ -208,12 +208,12 @@ st.title("Innovation Adoption Model")
 open_ratio = st.select_slider(
     "Select the ratio of people open to change",
     options = [0.08, 0.18, 0.26, 0.34, 0.4, 0.46, 0.5, 0.54, 0.58],
-    value = 0.26
+    value = 0.4
     )
 manager_ratio = st.select_slider(
     "Select the ratio of persuasive managers",
     options = [0.02, 0.12, 0.2],
-    value = 0.12
+    value = 0.2
 )
 
 #### Initializing model
@@ -238,9 +238,9 @@ list_table = ['step ' + str(i) for i in range(11)]
 df_table = model_data.copy()
 df_table.index = list_table
 
-#### Show data table in browser
-st.subheader("Model data at each step")
-st.dataframe(df_table)
+# #### Show data table in browser
+# st.subheader("Model data at each step")
+# st.dataframe(df_table)
 
 #### Illustration on browser
 fig1, ax1 = plt.subplots(figsize=(9, 5))
