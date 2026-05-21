@@ -203,7 +203,9 @@ class InnovationAdoptionModel(Model):
 
 #### Browser title
 st.title("Innovation Adoption Agent Based Model")
+st.markdown("##")
 st.write("The number of persuasive managers and people open to change is adjustable.")
+st.markdown("#")
 #### Browser input
 open_ratio = st.select_slider(
     "Select the ratio of people open to change",
