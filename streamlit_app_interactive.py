@@ -320,9 +320,10 @@ agent_data = model.datacollector.get_agent_vars_dataframe()
 
 final_step = model_data.index.max()
 final_agent_data = agent_data.loc[final_step]
-st.write("**To see the different steps the ABM goes through please push the button**")
+st.write("** Different steps the ABM goes through**")
+# st.button("Show all steps")
 
-if st.button("Show all steps"):
+if 1==1:
 
    fig, ax = plt.subplots(figsize=(7, 7))
 
