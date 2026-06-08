@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 from mesa import Agent, Model
 from mesa.space import NetworkGrid
 from mesa.datacollection import DataCollector
-
+import math
 
 #### Agents and attributes ####
 class InnovationAgent(Agent):
@@ -32,12 +32,12 @@ class InnovationAgent(Agent):
         self.influence = self.random.uniform(0.5, 1.5)
 
         #### Modify attributes by type
-        if self.agent_type == "PolicyMaker":
+        if self.agent_type == "Policy Maker":
             self.openness *= 1.4
             self.resistance *= 0.6
             self.influence *= 1.6
 
-        elif self.agent_type == "Skeptic":
+        elif self.agent_type == "Neutral User":
             self.openness *= 0.7
             self.resistance *= 1.4
 
@@ -123,15 +123,15 @@ class InnovationAdoptionModel(Model):
 
         self.grid = NetworkGrid(self.network)
 
-        policymaker_ratio = 0.04
-        skeptic_ratio = 1 - policymaker_ratio - manager_ratio - open_ratio
+        neutral_ratio = 1 - manager_ratio - open_ratio
 
-        #### Agent types ratio
-        agent_types = self.random.choices(
-            ["PolicyMaker", "Open", "Skeptic", "Manager"],
-            weights=[policymaker_ratio, open_ratio, skeptic_ratio, manager_ratio],
-            k=self.N
+        #### Agent types ratio — exactly 1 PolicyMaker, rest distributed by ratio
+        agent_types = ["Policy Maker"] + self.random.choices(
+            ["Receptive User", "Neutral User", "Manager"],
+            weights=[open_ratio, neutral_ratio, manager_ratio],
+            k=self.N - 1
         )
+        self.random.shuffle(agent_types)
 
         self.node_to_agent = {}
 
@@ -148,7 +148,7 @@ class InnovationAdoptionModel(Model):
 
         PolicyMakers = [
             agent for agent in self.node_to_agent.values()
-            if agent.agent_type == "PolicyMaker"
+            if agent.agent_type == "Policy Maker"
         ]
 
         if len(PolicyMakers) >= 2:
@@ -156,7 +156,7 @@ class InnovationAdoptionModel(Model):
         elif len(PolicyMakers) == 1:
             others = [
                 agent for agent in self.node_to_agent.values()
-                if agent.agent_type != "PolicyMaker"
+                if agent.agent_type != "Policy Maker"
             ]
             initial_adopters = PolicyMakers + self.random.sample(others, 1)
         else:
@@ -208,9 +208,9 @@ st.write("The number of persuasive managers and people open to change is adjusta
 # st.markdown("#")
 #### Browser input
 open_ratio = st.select_slider(
-    "Select the ratio of people open to change",
+    "Select the ratio of people receptive to change",
     options = [0.08, 0.18, 0.26, 0.34, 0.4, 0.46, 0.5, 0.54, 0.58],
-    value = 0.4
+    value = 0.54
     )
 manager_ratio = st.select_slider(
     "Select the ratio of persuasive managers",
@@ -220,8 +220,8 @@ manager_ratio = st.select_slider(
 
 #### Initializing model
 model = InnovationAdoptionModel(
-    N=25,
-    p_connection=0.12,
+    N=30,
+    p_connection=0.15,
     external_support=0.02,
     adoption_margin=0.35,
     open_ratio=open_ratio,
@@ -236,7 +236,7 @@ for _ in range(T):
     model.step()
 
 model_data = model.datacollector.get_model_vars_dataframe()
-list_table = ['step ' + str(i) for i in range(11)]
+list_table = ['step ' + str(i) for i in range(T + 1)]
 df_table = model_data.copy()
 df_table.index = list_table
 
@@ -247,9 +247,9 @@ df_table.index = list_table
 #### Illustration on browser
 fig1, ax1 = plt.subplots(figsize=(9, 5))
 
-ax1.plot(model_data.index, model_data["Adopted"], marker="o", color="green", label="Adopted")
-ax1.plot(model_data.index, model_data["Considering"], marker="o", color="orange", label="Considering")
-ax1.plot(model_data.index, model_data["Not adopted"], marker="o", color="red", label="Not adopted")
+ax1.plot(model_data.index, model_data["Not adopted"], marker="o", color="#e74c3c", label="Not adopted")
+ax1.plot(model_data.index, model_data["Considering"], marker="o", color="#f39c12", label="Considering")
+ax1.plot(model_data.index, model_data["Adopted"], marker="o", color="#27ae60", label="Adopted")
 
 ax1.set_xlabel("Time step")
 ax1.set_ylabel("Number of agents")
@@ -296,18 +296,18 @@ st.subheader("Expected profit with respect to number of adopters")
 st.pyplot(fig2)
 
 #### Fixed positions for all animation frames
-pos = nx.spring_layout(model.network, seed=5)
+pos = nx.spring_layout(model.network, seed=4)
 
 state_color_map = {
-    0: "red",
-    1: "orange",
-    2: "green"
+    0: "#e63a27",
+    1: "#f39c12",
+    2: "#27ae60"
 }
 
 type_marker_map = {
-    "PolicyMaker": "*",
-    "Open": "o",
-    "Skeptic": "s",
+    "Policy Maker": "P",
+    "Receptive User": "o",
+    "Neutral User": "s",
     "Manager": "D"
 }
 
@@ -328,7 +328,8 @@ st.subheader("**Different steps the ABM goes through**")
 
 if 1==1:
 
-   fig, ax = plt.subplots(figsize=(7, 7))
+   fig, ax = plt.subplots(figsize=(6, 5))
+   fig.subplots_adjust(right=0.74)
 
    def draw_frame(frame):
         ax.clear()
@@ -351,13 +352,20 @@ if 1==1:
                 state = frame_data.loc[agent.unique_id]["State"]
                 node_colors.append(state_color_map[state])
 
+            node_size_map_2d = {
+                "Policy Maker": 550,
+                "Receptive User": 550,
+                "Neutral User": 550,
+                "Manager": 550
+            }
+
             nx.draw_networkx_nodes(
                 model.network,
                 pos,
                 nodelist=nodes_of_type,
                 node_color=node_colors,
                 node_shape=marker,
-                node_size=750,
+                node_size=node_size_map_2d[agent_type],
                 edgecolors="black",
                 linewidths=1.0,
                 ax=ax
@@ -382,16 +390,25 @@ if 1==1:
         considering = model_data.loc[frame, "Considering"]
         not_adopted = model_data.loc[frame, "Not adopted"]
 
+        type_legend = [
+            Line2D([0], [0], marker=m, color="w", label=t,
+                markerfacecolor="gray", markeredgecolor="black", markersize=6)
+            for t, m in type_marker_map.items()
+        ]
         state_legend = [
-            Line2D([0], [0], marker="o", color="w", label="Adopted",
-                markerfacecolor="green", markeredgecolor="black", markersize=10),
-            Line2D([0], [0], marker="o", color="w", label="Considering",
-                markerfacecolor="orange", markeredgecolor="black", markersize=10),
             Line2D([0], [0], marker="o", color="w", label="Not adopted",
-                markerfacecolor="red", markeredgecolor="black", markersize=10),
+                markerfacecolor="#e74c3c", markeredgecolor="black", markersize=8),
+            Line2D([0], [0], marker="o", color="w", label="Considering",
+                markerfacecolor="#f39c12", markeredgecolor="black", markersize=8),
+            Line2D([0], [0], marker="o", color="w", label="Adopted",
+                markerfacecolor="#27ae60", markeredgecolor="black", markersize=8),
         ]
 
-        ax.legend(handles=state_legend, loc="upper right")
+        leg1 = ax.legend(handles=type_legend, loc="upper left", bbox_to_anchor=(1.02, 1), title="Agent Type", borderaxespad=0, frameon=False)
+        leg1.get_title().set_fontweight("bold")
+        ax.add_artist(leg1)
+        leg2 = ax.legend(handles=state_legend, loc="upper left", bbox_to_anchor=(1.02, 0.65), title="State", borderaxespad=0, frameon=False)
+        leg2.get_title().set_fontweight("bold")
 
    animation = FuncAnimation(
         fig,
@@ -402,7 +419,7 @@ if 1==1:
     )
    components.html(
     animation.to_jshtml(),
-    height=1500,
+    height=1000,
     )
 
 
@@ -416,9 +433,36 @@ selected_step = st.slider(
 )
 
 frame_data = agent_data.loc[selected_step]
+pos3d = {}
 
-raw_pos3d = nx.spring_layout(model.network, seed=5, dim=3)
-pos3d = {node: tuple(coords) for node, coords in raw_pos3d.items()}
+n = model.N
+
+for i, node in enumerate(model.network.nodes()):
+
+    phi = np.arccos(1 - 2*(i + 0.5)/n)
+    theta = np.pi * (1 + np.sqrt(5)) * (i + 0.5)
+
+    x = np.sin(phi) * np.cos(theta)
+    y = np.sin(phi) * np.sin(theta)
+    z = np.cos(phi)
+
+    pos3d[node] = (x, y, z)
+    u = np.linspace(0, 2*np.pi, 50)
+v = np.linspace(0, np.pi, 30)
+
+x_sphere = np.outer(np.cos(u), np.sin(v))
+y_sphere = np.outer(np.sin(u), np.sin(v))
+z_sphere = np.outer(np.ones(np.size(u)), np.cos(v))
+
+sphere_trace = go.Surface(
+    x=x_sphere,
+    y=y_sphere,
+    z=z_sphere,
+    opacity=0.10,
+    showscale=False,
+    hoverinfo="skip",
+    showlegend=False
+)
 edge_x = []
 edge_y = []
 edge_z = []
@@ -441,70 +485,95 @@ edge_trace = go.Scatter3d(
         width=1,
         color="gray"
     ),
-    hoverinfo="none"
+    hoverinfo="none",
+    showlegend=False
 )
-node_x = []
-node_y = []
-node_z = []
+color_map = {
+    0: "#e74c3c",
+    1: "#f39c12",
+    2: "#27ae60"
+}
 
-node_colors = []
-node_sizes = []
-hover_text = []
+size_map = {
+    "Policy Maker": 16,
+    "Manager": 18,
+    "Receptive User": 12,
+    "Neutral User": 12
+}
+
+type_symbol_map_3d = {
+    "Policy Maker": "cross",
+    "Receptive User": "circle",
+    "Neutral User": "square",
+    "Manager": "diamond"
+}
+
+nodes_by_type = {t: {"x": [], "y": [], "z": [], "colors": [], "sizes": [], "hover": [], "labels": []} for t in type_symbol_map_3d}
 
 for node_id, agent in model.node_to_agent.items():
-
     x, y, z = pos3d[node_id]
-
     state = frame_data.loc[agent.unique_id]["State"]
-
-    color_map = {
-        0: "red",
-        1: "orange",
-        2: "green"
-    }
-
-    size_map = {
-        "PolicyMaker": 22,
-        "Manager": 18,
-        "Open": 12,
-        "Skeptic": 12
-    }
-
-    node_x.append(x)
-    node_y.append(y)
-    node_z.append(z)
-
-    node_colors.append(color_map[state])
-    node_sizes.append(size_map[agent.agent_type])
-
-    hover_text.append(
-        f"""
-        Agent {node_id}<br>
-        Type: {agent.agent_type}<br>
-        State: {state}<br>
-        Openness: {agent.openness:.2f}<br>
-        Resistance: {agent.resistance:.2f}<br>
-        Influence: {agent.influence:.2f}
-        """
+    t = agent.agent_type
+    nodes_by_type[t]["x"].append(x)
+    nodes_by_type[t]["y"].append(y)
+    nodes_by_type[t]["z"].append(z)
+    nodes_by_type[t]["colors"].append(color_map[state])
+    nodes_by_type[t]["sizes"].append(size_map[t])
+    nodes_by_type[t]["labels"].append(str(node_id))
+    nodes_by_type[t]["hover"].append(
+        f"Agent {node_id}<br>Type: {agent.agent_type}<br>State: {state}<br>"
+        f"Openness: {agent.openness:.2f}<br>Resistance: {agent.resistance:.2f}<br>Influence: {agent.influence:.2f}"
     )
-    node_trace = go.Scatter3d(
-    x=node_x,
-    y=node_y,
-    z=node_z,
-    mode="markers",
-    hovertext=hover_text,
-    hoverinfo="text",
-    marker=dict(
-        size=node_sizes,
-        color=node_colors,
-        opacity=0.9
+
+node_traces = [
+    go.Scatter3d(
+        x=nodes_by_type[t]["x"],
+        y=nodes_by_type[t]["y"],
+        z=nodes_by_type[t]["z"],
+        mode="markers+text",
+        name=t,
+        text=nodes_by_type[t]["labels"],
+        textposition="top center",
+        textfont=dict(size=9, color="black"),
+        hovertext=nodes_by_type[t]["hover"],
+        hoverinfo="text",
+        showlegend=False,
+        marker=dict(
+            symbol=type_symbol_map_3d[t],
+            size=nodes_by_type[t]["sizes"],
+            color=nodes_by_type[t]["colors"],
+            opacity=0.9
+        )
     )
-)
-    fig3d = go.Figure(
-    data=[
-        edge_trace,
-        node_trace
-    ]
+    for t in type_symbol_map_3d
+]
+
+type_legend_traces = [
+    go.Scatter3d(
+        x=[None], y=[None], z=[None],
+        mode="markers",
+        name=t,
+        legend="legend",
+        marker=dict(size=10, color="gray", symbol=type_symbol_map_3d[t]),
+        showlegend=True
+    )
+    for t in type_symbol_map_3d
+]
+
+state_legend_traces = [
+    go.Scatter3d(
+        x=[None], y=[None], z=[None],
+        mode="markers",
+        name=label,
+        legend="legend2",
+        marker=dict(size=10, color=color, symbol="circle"),
+        showlegend=True
+    )
+    for label, color in [("Not adopted", "#e74c3c"), ("Considering", "#f39c12"), ("Adopted", "#27ae60")]
+]
+
+fig3d = go.Figure(
+    data=[sphere_trace, edge_trace] + node_traces + type_legend_traces + state_legend_traces
 )
 
 fig3d.update_layout(
@@ -515,9 +584,20 @@ fig3d.update_layout(
         xaxis=dict(visible=False),
         yaxis=dict(visible=False),
         zaxis=dict(visible=False)
+    ),
+    legend=dict(
+        title=dict(text="<b>Agent Type</b>"),
+        x=1.0,
+        y=0.7
+    ),
+    legend2=dict(
+        title=dict(text="<b>State</b>"),
+        x=1.0,
+        y=0.5
     )
 )
 
+st.markdown('<style>div[data-testid="stPlotlyChart"] { margin-top: -8rem; }</style>', unsafe_allow_html=True)
 st.plotly_chart(
     fig3d,
     use_container_width=True
