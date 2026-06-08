@@ -4,3 +4,4 @@ numpy
 pandas
 mesa
 networkx
+plotly
