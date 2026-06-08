@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import networkx as nx
 import streamlit.components.v1 as components
-
+import plotly.graph_objects as go
 from matplotlib.animation import FuncAnimation
 from matplotlib.lines import Line2D
 from mesa import Agent, Model
@@ -404,3 +404,121 @@ if 1==1:
     animation.to_jshtml(),
     height=1500,
     )
+
+
+#### 3D visualization of the organizational network ####
+st.subheader("3D Organizational Network")
+selected_step = st.slider(
+    "Select simulation step",
+    0,
+    int(model_data.index.max()),
+    int(model_data.index.max())
+)
+
+frame_data = agent_data.loc[selected_step]
+
+raw_pos3d = nx.spring_layout(model.network, seed=5, dim=3)
+pos3d = {node: tuple(coords) for node, coords in raw_pos3d.items()}
+edge_x = []
+edge_y = []
+edge_z = []
+
+for u, v in model.network.edges():
+
+    x0, y0, z0 = pos3d[u]
+    x1, y1, z1 = pos3d[v]
+
+    edge_x += [x0, x1, None]
+    edge_y += [y0, y1, None]
+    edge_z += [z0, z1, None]
+
+edge_trace = go.Scatter3d(
+    x=edge_x,
+    y=edge_y,
+    z=edge_z,
+    mode="lines",
+    line=dict(
+        width=1,
+        color="gray"
+    ),
+    hoverinfo="none"
+)
+node_x = []
+node_y = []
+node_z = []
+
+node_colors = []
+node_sizes = []
+hover_text = []
+
+for node_id, agent in model.node_to_agent.items():
+
+    x, y, z = pos3d[node_id]
+
+    state = frame_data.loc[agent.unique_id]["State"]
+
+    color_map = {
+        0: "red",
+        1: "orange",
+        2: "green"
+    }
+
+    size_map = {
+        "PolicyMaker": 22,
+        "Manager": 18,
+        "Open": 12,
+        "Skeptic": 12
+    }
+
+    node_x.append(x)
+    node_y.append(y)
+    node_z.append(z)
+
+    node_colors.append(color_map[state])
+    node_sizes.append(size_map[agent.agent_type])
+
+    hover_text.append(
+        f"""
+        Agent {node_id}<br>
+        Type: {agent.agent_type}<br>
+        State: {state}<br>
+        Openness: {agent.openness:.2f}<br>
+        Resistance: {agent.resistance:.2f}<br>
+        Influence: {agent.influence:.2f}
+        """
+    )
+    node_trace = go.Scatter3d(
+    x=node_x,
+    y=node_y,
+    z=node_z,
+    mode="markers",
+    hovertext=hover_text,
+    hoverinfo="text",
+    marker=dict(
+        size=node_sizes,
+        color=node_colors,
+        opacity=0.9
+    )
+)
+    fig3d = go.Figure(
+    data=[
+        edge_trace,
+        node_trace
+    ]
+)
+
+fig3d.update_layout(
+    height=850,
+    margin=dict(l=0, r=0, t=30, b=0),
+    scene=dict(
+        aspectmode="data",
+        xaxis=dict(visible=False),
+        yaxis=dict(visible=False),
+        zaxis=dict(visible=False)
+    )
+)
+
+st.plotly_chart(
+    fig3d,
+    use_container_width=True
+)
