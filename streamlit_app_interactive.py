@@ -602,3 +602,9 @@ st.plotly_chart(
     fig3d,
     use_container_width=True
 )
+
+st.subheader("Innovation Adoption Barriers")
+st.write("- Lack of workflow integration")
+st.write("- Misaligned decision-making")
+st.write("- Infrastructural gaps")
+st.write("- Supply shortages")
